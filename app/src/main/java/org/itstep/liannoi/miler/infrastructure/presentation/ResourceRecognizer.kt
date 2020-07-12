@@ -1,4 +1,4 @@
-package org.itstep.liannoi.miler.application.common.interfaces
+package org.itstep.liannoi.miler.infrastructure.presentation
 
 interface ResourceRecognizer {
     fun recognize(name: String): Int

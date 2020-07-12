@@ -6,9 +6,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import org.itstep.liannoi.miler.R
-import org.itstep.liannoi.miler.application.common.interfaces.ResourceRecognizer
 import org.itstep.liannoi.miler.application.storage.music.models.RawMusicModel
 import org.itstep.liannoi.miler.application.storage.music.queries.ListQuery
+import org.itstep.liannoi.miler.infrastructure.presentation.ResourceRecognizer
 
 class RawMusicService private constructor() {
     private val disposable: CompositeDisposable = CompositeDisposable()

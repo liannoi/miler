@@ -13,28 +13,32 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.android.synthetic.main.adapter_card_raw_music_list.view.*
 import org.itstep.liannoi.miler.R
-import org.itstep.liannoi.miler.application.common.interfaces.MusicPlayerFacade
+import org.itstep.liannoi.miler.application.common.MusicPlayerFacade
 import org.itstep.liannoi.miler.application.storage.music.models.RawMusicModel
 import org.itstep.liannoi.miler.infrastructure.MusicPlayer
 
-class RawMusicListCardAdapter(private val music: List<RawMusicModel>) :
-    RecyclerView.Adapter<RawMusicListCardAdapter.ViewHolder>() {
+class RawMusicListCardAdapter(
+    private val music: List<RawMusicModel>,
+    private val musicPlayer: MusicPlayerFacade,
+    private val handler: MusicPlayer.Handler
+) : RecyclerView.Adapter<RawMusicListCardAdapter.ViewHolder>() {
 
     class ViewHolder(container: View) : RecyclerView.ViewHolder(container) {
-        class Builder {
-            private lateinit var view: View
+        class Builder(
+            private val context: Context,
+            private val resource: Int,
+            private val container: ViewGroup
+        ) {
 
-            fun view(
-                context: Context,
-                resource: Int,
-                container: ViewGroup,
-                attachToRoot: Boolean = false
-            ): Builder {
-                view = LayoutInflater.from(context).inflate(resource, container, attachToRoot)
+            private var attachToRoot: Boolean = false
+
+            fun attachToRoot(): Builder {
+                this.attachToRoot = true
                 return this
             }
 
-            fun create(): ViewHolder = ViewHolder(view)
+            fun create(): ViewHolder =
+                ViewHolder(LayoutInflater.from(context).inflate(resource, container, attachToRoot))
         }
 
         val musicTitleText: TextView = container.music_title_text
@@ -42,16 +46,10 @@ class RawMusicListCardAdapter(private val music: List<RawMusicModel>) :
     }
 
     private val disposable: CompositeDisposable = CompositeDisposable()
-    private lateinit var musicPlayer: MusicPlayerFacade
 
-    override fun onCreateViewHolder(container: ViewGroup, viewType: Int): ViewHolder {
-        val context = container.context
-        musicPlayer = MusicPlayer.getInstance(context)
-
-        return ViewHolder.Builder()
-            .view(context, R.layout.adapter_card_raw_music_list, container)
+    override fun onCreateViewHolder(container: ViewGroup, viewType: Int): ViewHolder =
+        ViewHolder.Builder(container.context, R.layout.adapter_card_raw_music_list, container)
             .create()
-    }
 
     override fun getItemCount(): Int {
         return music.size
@@ -75,23 +73,13 @@ class RawMusicListCardAdapter(private val music: List<RawMusicModel>) :
     private fun subscribeStarting(holder: ViewHolder, model: RawMusicModel) {
         holder.cardView
             .clicks()
-            .subscribe(
-                {
-                    musicPlayer.play(model.compositionId)
-
-                    holder.itemView
-                        .rootView
-                        .findViewById<TextView>(R.id.music_playing_title)
-                        .text = model.name
-                },
-                {
-                    Toast.makeText(
-                        holder.itemView.context,
-                        it.message.toString(),
-                        Toast.LENGTH_LONG
-                    ).show()
-                })
+            .subscribe({ musicPlayer.play(model, handler) }, { processException(holder, it) })
             .follow()
+    }
+
+    private fun processException(holder: ViewHolder, exception: Throwable) {
+        Toast.makeText(holder.itemView.context, exception.message.toString(), Toast.LENGTH_LONG)
+            .show()
     }
 
     ///////////////////////////////////////////////////////////////////////////

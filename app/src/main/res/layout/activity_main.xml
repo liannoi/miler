@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Title"
+        android:text="Select a song from the list or radio"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,13 +44,14 @@
         app:layout_constraintTop_toBottomOf="@+id/music_raw_playlist" />
 
     <Button
-        android:id="@+id/music_previous_button"
+        android:id="@+id/music_back_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:text="Previous"
+        android:enabled="false"
+        android:text="Back"
         app:layout_constraintEnd_toStartOf="@+id/music_action_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/music_playing_title" />
@@ -60,67 +61,96 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Play / Stop"
-        app:layout_constraintEnd_toStartOf="@+id/music_next_button"
-        app:layout_constraintStart_toEndOf="@+id/music_previous_button"
-        app:layout_constraintTop_toBottomOf="@+id/music_playing_title" />
+        android:enabled="false"
+        android:text="Play"
+        app:layout_constraintEnd_toStartOf="@+id/music_forward_button"
+        app:layout_constraintStart_toEndOf="@+id/music_back_button"
+        app:layout_constraintTop_toBottomOf="@+id/music_playing_title"
+        tools:text="Play / Pause" />
 
     <Button
-        android:id="@+id/music_next_button"
+        android:id="@+id/music_forward_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:text="Next"
+        android:enabled="false"
+        android:text="Forward"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/music_action_button"
         app:layout_constraintTop_toBottomOf="@+id/music_playing_title" />
 
     <Button
-        android:id="@+id/music_shuffle_button"
+        android:id="@+id/music_previous_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Shuffle"
+        android:enabled="false"
+        android:text="Previous"
         app:layout_constraintEnd_toStartOf="@+id/music_info_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/music_previous_button" />
+        app:layout_constraintTop_toBottomOf="@+id/music_back_button" />
 
     <Button
         android:id="@+id/music_info_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:enabled="false"
         android:text="Info"
-        app:layout_constraintEnd_toStartOf="@+id/music_loop_button"
-        app:layout_constraintStart_toEndOf="@+id/music_shuffle_button"
+        app:layout_constraintEnd_toStartOf="@+id/music_next_button"
+        app:layout_constraintStart_toEndOf="@+id/music_previous_button"
         app:layout_constraintTop_toBottomOf="@+id/music_action_button" />
 
     <Button
-        android:id="@+id/music_loop_button"
+        android:id="@+id/music_next_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Loop"
+        android:enabled="false"
+        android:text="Next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/music_info_button"
-        app:layout_constraintTop_toBottomOf="@+id/music_next_button" />
+        app:layout_constraintTop_toBottomOf="@+id/music_forward_button" />
+
+    <CheckBox
+        android:id="@+id/music_loop_check"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:enabled="false"
+        android:text="Loop"
+        app:layout_constraintEnd_toStartOf="@+id/radio_melodia_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/music_previous_button" />
+
+    <Button
+        android:id="@+id/radio_melodia_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Melodia FM"
+        app:layout_constraintEnd_toStartOf="@+id/music_radio_button"
+        app:layout_constraintStart_toEndOf="@+id/music_loop_check"
+        app:layout_constraintTop_toBottomOf="@+id/music_info_button" />
 
     <Button
         android:id="@+id/music_radio_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Radio"
+        android:text="Lounge FM"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/music_info_button" />
+        app:layout_constraintStart_toEndOf="@+id/radio_melodia_button"
+        app:layout_constraintTop_toBottomOf="@+id/music_next_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
