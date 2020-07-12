@@ -13,7 +13,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.android.synthetic.main.adapter_card_raw_music_list.view.*
 import org.itstep.liannoi.miler.R
-import org.itstep.liannoi.miler.application.common.MusicPlayerFacade
+import org.itstep.liannoi.miler.application.common.interfaces.MusicPlayerFacade
 import org.itstep.liannoi.miler.application.storage.music.models.RawMusicModel
 import org.itstep.liannoi.miler.infrastructure.MusicPlayer
 

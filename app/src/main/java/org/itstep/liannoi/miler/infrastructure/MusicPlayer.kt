@@ -9,7 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import org.itstep.liannoi.miler.application.common.MusicPlayerFacade
+import org.itstep.liannoi.miler.application.common.interfaces.MusicPlayerFacade
 import org.itstep.liannoi.miler.application.storage.music.models.RawMusicModel
 
 class MusicPlayer private constructor(
@@ -19,7 +19,12 @@ class MusicPlayer private constructor(
     private val audioManager: AudioManager
 ) : MusicPlayerFacade {
 
-    data class Details(
+    data class StreamDetails(
+        val name: String,
+        val url: String
+    )
+
+    data class PlayingDetails(
         val length: String,
         val isLooping: Boolean,
         val volume: Int
@@ -29,6 +34,7 @@ class MusicPlayer private constructor(
         fun onPlayingStartedSuccess(model: RawMusicModel)
         fun onPlayingPausedSuccess()
         fun onPlayingContinuedSuccess()
+        fun onPlayingStreamStartedSuccess(streamDetails: StreamDetails)
     }
 
     private var mediaPlayer: MediaPlayer? = null
@@ -69,11 +75,14 @@ class MusicPlayer private constructor(
             .follow()
     }
 
+    override fun playStream(streamDetails: StreamDetails, handler: Handler) {
+        TODO("Failed to implement, throws an error (1, -2147483648)")
+    }
+
     override fun play(model: RawMusicModel, handler: Handler) {
         Completable.fromAction {
             current = model
-            mediaPlayer?.release()
-            mediaPlayer = MediaPlayer.create(context, model.compositionId).also { it.start() }
+            prepareToPlay(model)
         }.subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { handler.onPlayingStartedSuccess(model) }
@@ -105,20 +114,20 @@ class MusicPlayer private constructor(
         mediaPlayer?.also { it.seekTo(it.currentPosition + seekTime) }
     }
 
-    override fun info(): Details {
-        var result: Details? = null
+    override fun info(): PlayingDetails {
+        var result: PlayingDetails? = null
 
         mediaPlayer?.also {
             val length = "${it.currentPosition}/${it.duration}"
 
-            result = Details(
+            result = PlayingDetails(
                 length,
                 it.isLooping,
                 audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
             )
         }
 
-        return result as Details
+        return result as PlayingDetails
     }
 
     override fun loop() {
@@ -135,6 +144,11 @@ class MusicPlayer private constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { handler.onPlayingContinuedSuccess() }
             .follow()
+    }
+
+    private fun prepareToPlay(model: RawMusicModel) {
+        mediaPlayer?.release()
+        mediaPlayer = MediaPlayer.create(context, model.compositionId).also { it.start() }
     }
 
     ///////////////////////////////////////////////////////////////////////////

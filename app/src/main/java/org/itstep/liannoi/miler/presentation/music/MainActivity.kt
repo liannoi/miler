@@ -7,7 +7,7 @@ import com.jakewharton.rxbinding4.view.clicks
 import com.trello.rxlifecycle4.android.lifecycle.kotlin.bindToLifecycle
 import kotlinx.android.synthetic.main.activity_main.*
 import org.itstep.liannoi.miler.R
-import org.itstep.liannoi.miler.application.common.MusicPlayerFacade
+import org.itstep.liannoi.miler.application.common.interfaces.MusicPlayerFacade
 import org.itstep.liannoi.miler.application.storage.music.RawMusicService
 import org.itstep.liannoi.miler.application.storage.music.models.RawMusicModel
 import org.itstep.liannoi.miler.application.storage.music.queries.ListQuery
@@ -77,6 +77,8 @@ class MainActivity : AbstractActivity(),
         music_forward_button.isEnabled = true
         music_info_button.isEnabled = true
         music_loop_check.isEnabled = true
+        music_previous_button.isEnabled = true
+        music_next_button.isEnabled = true
     }
 
     override fun onPlayingPausedSuccess() {
@@ -85,6 +87,12 @@ class MainActivity : AbstractActivity(),
 
     override fun onPlayingContinuedSuccess() {
         music_action_button.text = "Pause"
+    }
+
+    override fun onPlayingStreamStartedSuccess(streamDetails: MusicPlayer.StreamDetails) {
+        music_playing_title.text = streamDetails.name
+        music_action_button.text = "Pause"
+        music_action_button.isEnabled = true
     }
 
     ///////////////////////////////////////////////////////////////////////////
